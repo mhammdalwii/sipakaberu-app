@@ -37,7 +37,7 @@
                     <img src="https://placehold.co/48x48/E0F2F1/00796B?text=EDU" alt="Edukasi" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Edukasi</span>
                 </a>
-                <a href="#" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
+                <a href="{{ route('resep.index') }}" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
                     <img src="https://placehold.co/48x48/FFF3E0/E65100?text=RSP" alt="Resep" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Resep Makanan</span>
                 </a>
