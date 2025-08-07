@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\RecipeController;
 
 
 Route::get('/', function () {
@@ -26,6 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/edukasi/{category:slug}', [EducationController::class, 'show'])->name('edukasi.show');
     // Rute untuk menampilkan satu postingan video
     Route::get('/post/{educationPost:slug}', [EducationController::class, 'showPost'])->name('edukasi.post.show');
+    Route::get('/resep', [RecipeController::class, 'index'])->name('resep.index');
+    Route::get('/resep/kategori/{recipeCategory:slug}', [RecipeController::class, 'showCategory'])->name('resep.category');
+    Route::get('/resep/detail/{recipe:slug}', [RecipeController::class, 'show'])->name('resep.detail');
 });
 
 require __DIR__ . '/auth.php';
