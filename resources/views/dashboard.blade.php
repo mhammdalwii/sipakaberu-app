@@ -41,7 +41,7 @@
                     <img src="https://placehold.co/48x48/FFF3E0/E65100?text=RSP" alt="Resep" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Resep Makanan</span>
                 </a>
-                <a href="#" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
+                <a href="{{ route('jadwal.index') }}" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
                     <img src="https://placehold.co/48x48/F3E5F5/6A1B9A?text=JDW" alt="Jadwal" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Jadwal</span>
                 </a>
@@ -62,16 +62,27 @@
             {{-- Jadwal Pemeriksaan Mendatang --}}
             <div class="mb-6">
                 <h3 class="font-bold text-lg mb-2 text-gray-800">Jadwal Pemeriksaan akan datang!</h3>
-                <div class="bg-white rounded-lg p-4 flex justify-between items-center shadow">
-                    <div>
-                        <p class="text-xs text-gray-500">🗓️ Jadwal</p>
-                        <p class="font-bold text-md">Posyandu Dusun Kampung Baru</p>
+
+                {{-- Cek apakah ada data jadwal --}}
+                @if ($upcomingAppointment)
+                    <div class="bg-white rounded-lg p-4 flex justify-between items-center shadow">
+                        <div>
+                            <p class="text-xs text-gray-500">🗓️ {{ $upcomingAppointment->location }}</p>
+                            <p class="font-bold text-md">{{ $upcomingAppointment->title }}</p>
+                        </div>
+                        <div class="text-center border-l pl-4 ml-4">
+                            <p class="font-bold text-xl text-red-500">
+                                {{ $upcomingAppointment->schedule_date->format('d') }}</p>
+                            <p class="text-xs text-gray-500 uppercase">
+                                {{ $upcomingAppointment->schedule_date->translatedFormat('M Y') }}</p>
+                        </div>
                     </div>
-                    <div class="text-center border-l pl-4 ml-4">
-                        <p class="font-bold text-xl text-red-500">20</p>
-                        <p class="text-xs text-gray-500 uppercase">Juli</p>
+                @else
+                    {{-- Tampilkan ini jika tidak ada jadwal --}}
+                    <div class="bg-white rounded-lg p-4 text-center shadow">
+                        <p class="text-sm text-gray-500">Belum ada jadwal yang akan datang.</p>
                     </div>
-                </div>
+                @endif
             </div>
 
             {{-- Spesial untukmu --}}
@@ -113,7 +124,8 @@
                 </svg>
                 <span class="text-xs">Notifikasi</span>
             </a>
-            <a href="{{ route('profile.edit') }}" class="flex flex-col items-center text-gray-400 hover:text-green-500">
+            <a href="{{ route('profile.edit') }}"
+                class="flex flex-col items-center text-gray-400 hover:text-green-500">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
