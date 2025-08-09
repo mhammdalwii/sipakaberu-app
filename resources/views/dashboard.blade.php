@@ -45,7 +45,8 @@
                     <img src="https://placehold.co/48x48/F3E5F5/6A1B9A?text=JDW" alt="Jadwal" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Jadwal</span>
                 </a>
-                <a href="#" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
+                <a href="{{ route('tanaman-obat.index') }}"
+                    class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
                     <img src="https://placehold.co/48x48/E8F5E9/2E7D32?text=OBT" alt="Tanaman" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Tanaman Obat</span>
                 </a>
