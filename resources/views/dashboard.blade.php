@@ -50,11 +50,13 @@
                     <img src="https://placehold.co/48x48/E8F5E9/2E7D32?text=OBT" alt="Tanaman" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Tanaman Obat</span>
                 </a>
-                <a href="#" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
+                <a href="{{ route('layanan-kesehatan.index') }}"
+                    class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
                     <img src="https://placehold.co/48x48/FFEBEE/B71C1C?text=LYN" alt="Layanan" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Layanan</span>
                 </a>
-                <a href="#" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
+                <a href="{{ route('pusat-bantuan.index') }}"
+                    class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
                     <img src="https://placehold.co/48x48/E0F7FA/006064?text=HELP" alt="Bantuan" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Pusat Bantuan</span>
                 </a>

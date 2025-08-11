@@ -7,6 +7,8 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MedicinalPlantController;
+use App\Http\Controllers\PosyanduController;
+use App\Http\Controllers\HelpCenterController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/jadwal', [AppointmentController::class, 'index'])->name('jadwal.index');
     Route::get('/tanaman-obat', [MedicinalPlantController::class, 'index'])->name('tanaman-obat.index');
     Route::get('/tanaman-obat/{medicinalPlant:slug}', [MedicinalPlantController::class, 'show'])->name('tanaman-obat.show');
+    Route::get('/layanan-kesehatan', [PosyanduController::class, 'index'])->name('layanan-kesehatan.index');
+    Route::get('/pusat-bantuan', [HelpCenterController::class, 'index'])->name('pusat-bantuan.index');
 });
 
 require __DIR__ . '/auth.php';
