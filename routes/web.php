@@ -9,6 +9,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MedicinalPlantController;
 use App\Http\Controllers\PosyanduController;
 use App\Http\Controllers\HelpCenterController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/show', [ProfileController::class, 'show'])->name('profile.show');
 });
 
 Route::middleware('auth')->group(function () {
@@ -38,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/tanaman-obat/{medicinalPlant:slug}', [MedicinalPlantController::class, 'show'])->name('tanaman-obat.show');
     Route::get('/layanan-kesehatan', [PosyanduController::class, 'index'])->name('layanan-kesehatan.index');
     Route::get('/pusat-bantuan', [HelpCenterController::class, 'index'])->name('pusat-bantuan.index');
+    Route::get('/notifikasi', [NotificationController::class, 'index'])->name('notifikasi.index');
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profile.show');
 });
 
 require __DIR__ . '/auth.php';
