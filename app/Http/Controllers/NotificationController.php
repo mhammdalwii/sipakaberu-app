@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
+
 
 
 class NotificationController extends Controller
@@ -18,5 +20,16 @@ class NotificationController extends Controller
         Auth::user()->notifications()->whereNull('read_at')->update(['read_at' => now()]);
 
         return view('notifikasi.index', ['notifications' => $notifications]);
+    }
+    public function destroy(Notification $notification)
+    {
+        // PENTING: Pengecekan keamanan agar user tidak bisa menghapus notifikasi orang lain.
+        if (auth()->id() !== $notification->user_id) {
+            abort(403); // Akses ditolak
+        }
+
+        $notification->delete();
+
+        return back()->with('status', 'Notifikasi berhasil dihapus.');
     }
 }

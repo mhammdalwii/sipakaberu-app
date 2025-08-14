@@ -10,9 +10,11 @@ use App\Http\Controllers\MedicinalPlantController;
 use App\Http\Controllers\PosyanduController;
 use App\Http\Controllers\HelpCenterController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 
@@ -42,6 +44,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/pusat-bantuan', [HelpCenterController::class, 'index'])->name('pusat-bantuan.index');
     Route::get('/notifikasi', [NotificationController::class, 'index'])->name('notifikasi.index');
     Route::get('/profil', [ProfileController::class, 'show'])->name('profile.show');
+    Route::delete('/notifikasi/{notification}', [NotificationController::class, 'destroy'])->name('notifikasi.destroy');
+    Route::get('/konsultasi', [ConsultationController::class, 'index'])->name('konsultasi.index');
+    Route::get('/konsultasi/baru', [ConsultationController::class, 'create'])->name('konsultasi.create');
+    Route::post('/konsultasi', [ConsultationController::class, 'store'])->name('konsultasi.store');
+    Route::get('/konsultasi/{consultation}', [ConsultationController::class, 'show'])->name('konsultasi.show');
+    Route::post('/konsultasi/{consultation}/balas', [ConsultationController::class, 'reply'])->name('konsultasi.reply');
 });
 
 require __DIR__ . '/auth.php';

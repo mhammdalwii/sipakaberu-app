@@ -39,8 +39,8 @@
                                     {{-- Placeholder untuk thumbnail video --}}
                                     <div
                                         class="bg-gray-200 rounded-lg h-24 w-full flex items-center justify-center mb-2">
-                                        <img src="https://placehold.co/150x100/E0F2F1/00796B?text=Video"
-                                            alt="{{ $post->title }}" class="w-full h-full rounded-lg object-cover">
+                                        <img src="images/edukasi.png" alt="{{ $post->title }}"
+                                            class="w-full h-full rounded-lg object-cover">
                                     </div>
                                     <h3 class="text-sm font-medium text-gray-800 truncate">{{ $post->title }}</h3>
                                 </a>
