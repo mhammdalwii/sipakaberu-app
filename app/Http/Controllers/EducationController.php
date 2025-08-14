@@ -26,9 +26,12 @@ class EducationController extends Controller
      */
     public function show(Category $category)
     {
-        // Mengambil data kategori beserta relasi postingannya (EducationPost)
-        $category->load('educationPosts');
-        return view('edukasi.show', ['category' => $category]);
+        $posts = $category->educationPosts()->latest()->paginate(12);
+
+        return view('edukasi.show', [
+            'category' => $category,
+            'posts' => $posts,
+        ]);
     }
 
     public function showPost(EducationPost $educationPost)

@@ -34,30 +34,30 @@
                 {{-- Anda perlu menyiapkan gambar ikon di folder public/images/icons/ --}}
                 <a href="{{ route('edukasi.index') }}"
                     class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
-                    <img src="https://placehold.co/48x48/E0F2F1/00796B?text=EDU" alt="Edukasi" class="h-12 w-12 mb-1">
+                    <img src="images/logoEdukasi.png" alt="Edukasi" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Edukasi</span>
                 </a>
                 <a href="{{ route('resep.index') }}" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
-                    <img src="https://placehold.co/48x48/FFF3E0/E65100?text=RSP" alt="Resep" class="h-12 w-12 mb-1">
+                    <img src="images/logoResepMakanan.png" alt="Resep" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Resep Makanan</span>
                 </a>
                 <a href="{{ route('jadwal.index') }}" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
-                    <img src="https://placehold.co/48x48/F3E5F5/6A1B9A?text=JDW" alt="Jadwal" class="h-12 w-12 mb-1">
+                    <img src="images/jadwalPemeriksaan.png" alt="Jadwal" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Jadwal</span>
                 </a>
                 <a href="{{ route('tanaman-obat.index') }}"
                     class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
-                    <img src="https://placehold.co/48x48/E8F5E9/2E7D32?text=OBT" alt="Tanaman" class="h-12 w-12 mb-1">
+                    <img src="images/tanamanObat.png" alt="Tanaman" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Tanaman Obat</span>
                 </a>
                 <a href="{{ route('layanan-kesehatan.index') }}"
                     class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
-                    <img src="https://placehold.co/48x48/FFEBEE/B71C1C?text=LYN" alt="Layanan" class="h-12 w-12 mb-1">
+                    <img src="images/layananKesehatan.png" alt="Layanan" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Layanan</span>
                 </a>
                 <a href="{{ route('pusat-bantuan.index') }}"
                     class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
-                    <img src="https://placehold.co/48x48/E0F7FA/006064?text=HELP" alt="Bantuan" class="h-12 w-12 mb-1">
+                    <img src="images/bantuan.png" alt="Bantuan" class="h-12 w-12 mb-1">
                     <span class="text-xs font-medium">Pusat Bantuan</span>
                 </a>
             </div>
@@ -111,7 +111,8 @@
                 </svg>
                 <span class="text-xs">Beranda</span>
             </a>
-            <a href="#" class="flex flex-col items-center text-gray-400 hover:text-green-500">
+            <a href="{{ route('konsultasi.index') }}"
+                class="flex flex-col items-center text-gray-400 hover:text-green-500">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
