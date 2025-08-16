@@ -4,17 +4,18 @@
     </x-slot>
 
     <div class="bg-gray-50 min-h-screen">
-        {{-- Header Hijau --}}
-        <div class="bg-green-500 p-4 rounded-b-3xl shadow-lg text-white">
+        <div class="bg-[#31C74A] p-4 rounded-b-3xl shadow-lg text-white">
             <div class="flex items-center space-x-4">
-                <img src="https://i.pravatar.cc/150?u={{ Auth::user()->id }}" alt="Avatar"
-                    class="h-16 w-16 rounded-full border-2 border-white">
+                <img src="{{ Auth::user()->profile_photo_path
+                    ? asset('storage/' . Auth::user()->profile_photo_path)
+                    : 'https://i.pravatar.cc/150?u=' . Auth::user()->id }}"
+                    alt="Avatar" class="h-16 w-16 rounded-full border-2 border-white object-cover">
                 <div>
-                    {{-- Mengambil nama pengguna yang sedang login --}}
                     <h1 class="text-xl font-bold">{{ Auth::user()->name }}</h1>
                 </div>
             </div>
         </div>
+
 
         {{-- Menu List --}}
         <div class="p-4">

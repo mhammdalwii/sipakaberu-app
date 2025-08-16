@@ -11,10 +11,15 @@
 
         <div class="flex-grow p-4 space-y-4">
             @foreach ($consultation->messages as $message)
-                <div
-                    class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg {{ $message->user_id === Auth::id() ? 'bg-green-200' : 'bg-white shadow' }}">
-                    <div class="prose prose-sm max-w-none">{!! $message->body !!}</div>
-                    <p class="text-xs text-gray-400 mt-1 text-right">{{ $message->created_at->format('H:i') }}</p>
+                <div class="flex {{ $message->user_id === Auth::id() ? 'justify-end' : 'justify-start' }}">
+                    <div
+                        class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg 
+                        {{ $message->user_id === Auth::id() ? 'bg-green-200 rounded-br-none' : 'bg-white shadow rounded-bl-none' }}">
+                        <div class="prose prose-sm max-w-none">{!! $message->body !!}</div>
+                        <p class="text-xs text-gray-400 mt-1 text-right">
+                            {{ $message->created_at->format('H:i') }}
+                        </p>
+                    </div>
                 </div>
             @endforeach
         </div>

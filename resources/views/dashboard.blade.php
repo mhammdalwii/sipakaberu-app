@@ -6,7 +6,7 @@
 
     <div class="bg-gray-50 min-h-screen">
         {{-- BAGIAN 1: HEADER HIJAU DENGAN NAMA & AVATAR --}}
-        <div class="bg-green-500 p-4 rounded-b-3xl shadow-lg text-white relative z-10">
+        <div class="bg-[#31C74A] p-4 rounded-b-3xl shadow-lg text-white relative z-10">
             <div class="flex items-center justify-between">
                 <div>
                     {{-- Mengambil nama pengguna yang sedang login --}}
@@ -14,9 +14,10 @@
                     <p class="text-sm">Selamat Datang di SIKABERU</p>
                 </div>
                 <div>
-                    {{-- Avatar placeholder, akan unik untuk setiap user berdasarkan ID-nya --}}
-                    <img src="https://i.pravatar.cc/150?u={{ Auth::user()->id }}" alt="Avatar"
-                        class="h-14 w-14 rounded-full border-2 border-white">
+                    <img src="{{ Auth::user()->profile_photo_path
+                        ? asset('storage/' . Auth::user()->profile_photo_path) . '?v=' . time()
+                        : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=random' }}"
+                        alt="Avatar" class="h-14 w-14 rounded-full border-2 border-white object-cover" loading="lazy">
                 </div>
             </div>
         </div>
@@ -31,7 +32,7 @@
 
             {{-- Grid Menu Utama --}}
             <div class="grid grid-cols-3 gap-4 text-center mb-6">
-                {{-- Anda perlu menyiapkan gambar ikon di folder public/images/icons/ --}}
+                {{--  gambar ikon di folder public/images/icons/ --}}
                 <a href="{{ route('edukasi.index') }}"
                     class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
                     <img src="images/logoEdukasi.png" alt="Edukasi" class="h-12 w-12 mb-1">
