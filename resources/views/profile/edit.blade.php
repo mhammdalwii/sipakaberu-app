@@ -1,140 +1,132 @@
+{{-- resources/views/profile/edit.blade.php --}}
 <x-app-layout>
-    <div class="bg-gray-50 min-h-screen">
-        {{-- Header --}}
-        <div class="p-4 flex items-center border-b sticky top-0 bg-white z-10">
-            <a href="{{ route('profile.show') }}" class="text-gray-700">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </a>
-            <h1 class="text-lg font-bold text-center flex-grow">Profil Saya</h1>
-            <div class="w-6"></div>
-        </div>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Edit Profil') }}
+        </h2>
+    </x-slot>
 
-        {{-- Avatar --}}
-        <div class="bg-green-500 p-4 rounded-b-3xl text-white text-center">
-            <div class="flex justify-center mb-2">
-                <div class="relative">
-                    <img src="https://i.pravatar.cc/150?u={{ Auth::user()->id }}" alt="Avatar"
-                        class="h-24 w-24 rounded-full border-4 border-white">
+    <div class="py-6">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+
+            {{-- Notifikasi flash message --}}
+            @if (session('status'))
+                <div
+                    class="mb-4 p-3 rounded 
+                    @if (session('status') === 'profile-updated') bg-green-100 text-green-700
+                    @elseif(session('status') === 'photo-updated') bg-blue-100 text-blue-700
+                    @else bg-gray-100 text-gray-700 @endif">
+                    {{ session('status') }}
                 </div>
-            </div>
-            <button class="text-sm font-semibold">Ubah Foto</button>
-        </div>
+            @endif
 
-        <div class="p-4 space-y-6">
-            {{-- Update Profile --}}
-            <section>
-                @if (session('status') === 'profile-updated')
-                    {{-- Modal Notification --}}
-                    <div id="successModal"
-                        class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div class="bg-white rounded-xl shadow-lg max-w-sm w-full p-6 text-center">
-                            <svg class="w-12 h-12 mx-auto text-green-500" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2l4-4m6 2a9 9 0 1 1 -18 0a9 9 0 0 1 18 0z" />
-                            </svg>
-                            <h2 class="mt-4 text-lg font-semibold text-gray-800">Berhasil!</h2>
-                            <p class="mt-2 text-sm text-gray-600">Data profil berhasil diperbarui.</p>
-                        </div>
+            {{-- Error validasi --}}
+            @if ($errors->any())
+                <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            {{-- === FORM UPDATE PROFIL === --}}
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
+                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                    @csrf
+                    @method('PATCH')
+
+                    {{-- Nama --}}
+                    <div class="mb-4">
+                        <label for="name" class="block font-medium text-sm text-gray-700">Nama</label>
+                        <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                     </div>
 
-                    {{-- Script Auto-Close --}}
-                    <script>
-                        setTimeout(() => {
-                            const modal = document.getElementById('successModal');
-                            if (modal) {
-                                modal.style.display = 'none';
-                            }
-                        }, 3000);
-                    </script>
-                @endif
+                    {{-- Email --}}
+                    <div class="mb-4">
+                        <label for="email" class="block font-medium text-sm text-gray-700">Email</label>
+                        <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                    </div>
 
-                <form method="post" action="{{ route('profile.update') }}">
-                    @csrf
-                    @method('patch')
+                    {{-- Phone --}}
+                    <div class="mb-4">
+                        <label for="phone" class="block font-medium text-sm text-gray-700">Nomor HP</label>
+                        <input id="phone" type="text" name="phone" value="{{ old('phone', $user->phone) }}"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
 
-                    <div class="bg-white rounded-lg shadow p-4 space-y-4">
-                        {{-- Name --}}
-                        <div>
-                            <x-input-label for="name" value="Nama" />
-                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
-                                :value="old('name', $user->name)" required autofocus />
-                            <x-input-error class="mt-2" :messages="$errors->get('name')" />
-                        </div>
+                    {{-- Gender --}}
+                    <div class="mb-4">
+                        <label for="gender" class="block font-medium text-sm text-gray-700">Jenis Kelamin</label>
+                        <select id="gender" name="gender"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                            <option value="Laki-laki"
+                                {{ old('gender', $user->gender) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="Perempuan"
+                                {{ old('gender', $user->gender) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                        </select>
+                    </div>
 
-                        {{-- Gender --}}
-                        <div>
-                            <x-input-label for="gender" value="Jenis Kelamin" />
-                            <select name="gender" id="gender"
-                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option value="Laki-laki" @if (old('gender', $user->gender) == 'Laki-laki') selected @endif>
-                                    Laki-laki
-                                </option>
-                                <option value="Perempuan" @if (old('gender', $user->gender) == 'Perempuan') selected @endif>
-                                    Perempuan
-                                </option>
-                            </select>
-                        </div>
+                    {{-- Tanggal Lahir --}}
+                    <div class="mb-4">
+                        <label for="date_of_birth" class="block font-medium text-sm text-gray-700">Tanggal Lahir</label>
+                        <input id="date_of_birth" type="date" name="date_of_birth"
+                            value="{{ old('date_of_birth', $user->date_of_birth) }}"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
 
-                        {{-- Date of Birth --}}
-                        <div>
-                            <x-input-label for="date_of_birth" value="Tanggal Lahir" />
-                            <x-text-input id="date_of_birth" name="date_of_birth" type="date"
-                                class="mt-1 block w-full" :value="old('date_of_birth', $user->date_of_birth)" />
-                        </div>
+                    {{-- Foto Profil --}}
+                    <div class="mb-4">
+                        <label class="block font-medium text-sm text-gray-700">Foto Profil</label>
 
-                        {{-- Phone --}}
-                        <div>
-                            <x-input-label for="phone" value="No. Telepon" />
-                            <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-full"
-                                :value="old('phone', $user->phone)" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
-                        </div>
+                        @if ($user->profile_photo_path)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $user->profile_photo_path) }}" alt="Profile Photo"
+                                    class="w-24 h-24 rounded-full object-cover">
+                            </div>
+                        @endif
 
-                        <x-primary-button class="w-full justify-center">
-                            {{ __('Simpan Perubahan') }}
-                        </x-primary-button>
+                        <input type="file" name="profile_photo" accept="image/*"
+                            class="block w-full text-sm text-gray-500">
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <x-primary-button>Simpan</x-primary-button>
+                        {{-- Tombol kembali --}}
+                        <a href="{{ 'profil' }}"
+                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                            Kembali
+                        </a>
                     </div>
                 </form>
-            </section>
+            </div>
 
-            {{-- Update Password --}}
+            {{-- === FORM UPDATE PASSWORD === --}}
             <section>
-                <form method="post" action="{{ route('password.update') }}">
-                    @csrf
-                    @method('put')
-
-                    <div class="bg-white rounded-lg shadow p-4 space-y-4">
+                <form method="post" action="{{ route('password.update') }}"> @csrf @method('put') <div
+                        class="bg-white rounded-lg shadow p-4 space-y-4">
                         <h3 class="font-bold text-lg">Ubah Password</h3>
-
                         {{-- Current Password --}}
                         <div>
-                            <x-input-label for="current_password" value="Password Saat Ini" />
-                            <x-text-input id="current_password" name="current_password" type="password"
-                                class="mt-1 block w-full" autocomplete="current-password" />
-                            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
+                            <x-input-label for="current_password" value="Password Saat Ini" /> <x-text-input
+                                id="current_password" name="current_password" type="password" class="mt-1 block w-full"
+                                autocomplete="current-password" /> <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
                         </div>
-
                         {{-- New Password --}}
-                        <div>
-                            <x-input-label for="password" value="Password Baru" />
+                        <div> <x-input-label for="password" value="Password Baru" />
                             <x-text-input id="password" name="password" type="password" class="mt-1 block w-full"
-                                autocomplete="new-password" />
-                            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
+                                autocomplete="new-password" /> <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
                         </div>
-
                         {{-- Confirm New Password --}}
-                        <div>
-                            <x-input-label for="password_confirmation" value="Konfirmasi Password Baru" />
+                        <div> <x-input-label for="password_confirmation" value="Konfirmasi Password Baru" />
                             <x-text-input id="password_confirmation" name="password_confirmation" type="password"
                                 class="mt-1 block w-full" autocomplete="new-password" />
                             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
                         </div>
-
-                        <x-primary-button class="w-full justify-center">
-                            {{ __('Simpan Password Baru') }}
+                        <x-primary-button class="w-full justify-center"> {{ __('Simpan Password Baru') }}
                         </x-primary-button>
                     </div>
                 </form>

@@ -8,12 +8,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage; // Pastikan ini ada
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
+    public function show(Request $request): View
+    {
+        return view('profile.show', [
+            'user' => $request->user(),
+        ]);
+    }
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -21,33 +25,30 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(Request $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name'          => ['required', 'string', 'max:255'],
-            'gender'        => ['nullable', 'in:Laki-laki,Perempuan'],
-            'date_of_birth' => ['nullable', 'date'],
-            'phone'         => ['required', 'string', 'max:20'],
-        ]);
-
         $user = $request->user();
-        $user->fill($validated);
+        $user->fill($request->validated());
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
+        $statusMessage = 'profile-updated'; // Pesan default
 
+        // --- LOGIKA UPLOAD FOTO PROFIL ---
+        if ($request->hasFile('profile_photo')) {
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+            $path = $request->file('profile_photo')->store('profile-photos', 'public');
+            $user->profile_photo_path = $path;
+
+            // ✅ Atur pesan notifikasi khusus untuk foto
+            $statusMessage = 'photo-updated';
+        }
         $user->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('status', $statusMessage);
     }
-
-    /**
-     * Delete the user's account.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
@@ -64,15 +65,5 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
-    }
-
-    /**
-     * Show profile view only (read-only).
-     */
-    public function show()
-    {
-        return view('profile.show', [
-            'user' => Auth::user(),
-        ]);
     }
 }
