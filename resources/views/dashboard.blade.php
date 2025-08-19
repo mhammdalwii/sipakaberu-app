@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- Kita kosongkan header bawaan agar bisa membuat layout custom --}}
     <x-slot name="header">
         <div class="hidden"></div>
     </x-slot>
@@ -9,7 +8,6 @@
         <div class="bg-[#31C74A] p-4 rounded-b-3xl shadow-lg text-white relative z-10">
             <div class="flex items-center justify-between">
                 <div>
-                    {{-- Mengambil nama pengguna yang sedang login --}}
                     <h1 class="text-xl font-bold">Hi, {{ Auth::user()->name }}</h1>
                     <p class="text-sm">Selamat Datang di SIKABERU</p>
                 </div>

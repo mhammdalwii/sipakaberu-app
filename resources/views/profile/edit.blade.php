@@ -11,12 +11,25 @@
 
             {{-- Notifikasi flash message --}}
             @if (session('status'))
-                <div
-                    class="mb-4 p-3 rounded 
-                    @if (session('status') === 'profile-updated') bg-green-100 text-green-700
-                    @elseif(session('status') === 'photo-updated') bg-blue-100 text-blue-700
-                    @else bg-gray-100 text-gray-700 @endif">
-                    {{ session('status') }}
+                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition
+                    class="fixed top-5 right-5 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414L9 14.414 5.293 10.707a1 1 0 111.414-1.414L9 11.586l6.293-6.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>
+                        @if (session('status') === 'profile-updated')
+                            Profil berhasil diperbarui 🎉
+                        @elseif (session('status') === 'photo-updated')
+                            Foto profil berhasil diganti 📷
+                        @elseif (session('status') === 'password-updated')
+                            Password berhasil diperbarui 🔑
+                        @else
+                            {{ session('status') }}
+                        @endif
+                    </span>
                 </div>
             @endif
 

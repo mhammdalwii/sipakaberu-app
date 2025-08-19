@@ -10,15 +10,19 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ConsultationResource extends Resource
 {
     protected static ?string $model = Consultation::class;
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\MessagesRelationManager::class,
+        ];
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -39,7 +43,7 @@ class ConsultationResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('subject')->label('Subjek'),
+                Tables\Columns\TextColumn::make('subject')->searchable()->label('Subjek'),
                 Tables\Columns\TextColumn::make('user.name')->label('Dari Pengguna'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
@@ -49,9 +53,7 @@ class ConsultationResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->label('Dibuat Pada'),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -62,12 +64,6 @@ class ConsultationResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            RelationManagers\MessagesRelationManager::class,
-        ];
-    }
 
     public static function getPages(): array
     {

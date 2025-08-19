@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage; // Pastikan ini ada
+use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\UserResource;
 
 class ProfileController extends Controller
 {
@@ -27,26 +28,29 @@ class ProfileController extends Controller
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        // Ambil user yang sedang login
         $user = $request->user();
+
+        // Isi data user dengan data yang sudah tervalidasi dari ProfileUpdateRequest
         $user->fill($request->validated());
 
+        // Jika user mengubah emailnya, reset status verifikasi email
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
-        $statusMessage = 'profile-updated'; // Pesan default
-
-        // --- LOGIKA UPLOAD FOTO PROFIL ---
         if ($request->hasFile('profile_photo')) {
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
-            $path = $request->file('profile_photo')->store('profile-photos', 'public');
-            $user->profile_photo_path = $path;
 
-            // ✅ Atur pesan notifikasi khusus untuk foto
-            $statusMessage = 'photo-updated';
+            // 2. Simpan foto baru di folder 'storage/app/public/profile-photos'
+            $path = $request->file('profile_photo')->store('profile-photos', 'public');
+
+            // 3. Simpan path foto baru ke database
+            $user->profile_photo_path = $path;
         }
         $user->save();
+        $statusMessage = $request->hasFile('profile_photo') ? 'photo-updated' : 'profile-updated';
         return Redirect::route('profile.edit')->with('status', $statusMessage);
     }
     public function destroy(Request $request): RedirectResponse
