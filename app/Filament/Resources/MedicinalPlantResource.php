@@ -15,6 +15,7 @@ class MedicinalPlantResource extends Resource
 {
     protected static ?string $model = MedicinalPlant::class;
     protected static ?string $navigationIcon = 'heroicon-o-sparkles';
+    protected static ?string $navigationGroup = 'Manajemen Tanaman Obat';
 
     public static function form(Form $form): Form
     {

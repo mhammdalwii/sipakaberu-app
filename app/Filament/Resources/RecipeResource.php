@@ -10,11 +10,13 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use Filament\Forms\Components\Tabs;
 
 class RecipeResource extends Resource
 {
     protected static ?string $model = Recipe::class;
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
+    protected static ?string $navigationGroup = 'Manajemen Resep';
 
     public static function form(Form $form): Form
     {

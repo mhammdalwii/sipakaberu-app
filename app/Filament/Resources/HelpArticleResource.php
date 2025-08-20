@@ -18,6 +18,8 @@ class HelpArticleResource extends Resource
     protected static ?string $navigationLabel = 'Panduan';
     protected static ?string $pluralModelLabel = 'Panduan';
     protected static ?string $modelLabel = 'Panduan';
+    protected static ?string $navigationGroup = 'Manajemen Pusat Bantuan';
+
 
     public static function form(Form $form): Form
     {

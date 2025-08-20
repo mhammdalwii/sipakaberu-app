@@ -15,6 +15,7 @@ class ConsultationResource extends Resource
 {
     protected static ?string $model = Consultation::class;
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static ?string $navigationGroup = 'Manajemen Konsultasi';
 
 
     public static function getRelations(): array
