@@ -26,15 +26,27 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function apiUpdate(ProfileUpdateRequest $request)
+    {
+        $user = $request->user();
+        $user->fill($request->validated());
+        if ($request->hasFile('profile_photo')) {
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+            $path = $request->file('profile_photo')->store('profile-photos', 'public');
+            $user->profile_photo_path = $path;
+        }
+        $user->save();
+        return new UserResource($user);
+    }
+    /**
+     * Memperbarui informasi profil pengguna.
+     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        // Ambil user yang sedang login
         $user = $request->user();
-
-        // Isi data user dengan data yang sudah tervalidasi dari ProfileUpdateRequest
         $user->fill($request->validated());
-
-        // Jika user mengubah emailnya, reset status verifikasi email
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }

@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/konsultasi', [ConsultationController::class, 'store'])->name('konsultasi.store');
     Route::get('/konsultasi/{consultation}', [ConsultationController::class, 'show'])->name('konsultasi.show');
     Route::post('/konsultasi/{consultation}/balas', [ConsultationController::class, 'reply'])->name('konsultasi.reply');
-    Route::post('/profile', [ProfileController::class, 'apiUpdate']);
+    Route::post('/profile', [ProfileController::class, 'apiUpdate'])->middleware('auth:sanctum');
 });
 
 require __DIR__ . '/auth.php';

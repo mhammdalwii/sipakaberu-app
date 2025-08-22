@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\HelpCenterController;
 use App\Http\Controllers\Api\ConsultationController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RecipeCategoryController;
+use App\Http\Controllers\ProfileController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -37,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
     Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
+    Route::post('/profile', [ProfileController::class, 'apiUpdate']);
 });
 
 
