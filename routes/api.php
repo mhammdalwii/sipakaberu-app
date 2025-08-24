@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/medicinal-plants', [MedicinalPlantController::class, 'index']);
     Route::get('/medicinal-plants/{medicinalPlant:slug}', [MedicinalPlantController::class, 'show']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
+    Route::get('/appointments/history', [AppointmentController::class, 'history']);
     Route::get('/posyandus', [PosyanduController::class, 'index']);
     Route::get('/help-articles', [HelpCenterController::class, 'index']);
     Route::get('/help-articles/{helpArticle:slug}', [HelpCenterController::class, 'show']);
