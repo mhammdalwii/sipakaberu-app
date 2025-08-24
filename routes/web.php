@@ -12,6 +12,7 @@ use App\Http\Controllers\HelpCenterController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BalitaController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -28,11 +29,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Rute untuk menampilkan semua kategori edukasi
     Route::get('/edukasi', [EducationController::class, 'index'])->name('edukasi.index');
-    // Rute untuk menampilkan semua video dalam satu kategori
     Route::get('/edukasi/{category:slug}', [EducationController::class, 'show'])->name('edukasi.show');
-    // Rute untuk menampilkan satu postingan video
     Route::get('/post/{educationPost:slug}', [EducationController::class, 'showPost'])->name('edukasi.post.show');
     Route::get('/resep', [RecipeController::class, 'index'])->name('resep.index');
     Route::get('/resep/kategori/{recipeCategory:slug}', [RecipeController::class, 'showCategory'])->name('resep.category');
@@ -50,6 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/konsultasi', [ConsultationController::class, 'store'])->name('konsultasi.store');
     Route::get('/konsultasi/{consultation}', [ConsultationController::class, 'show'])->name('konsultasi.show');
     Route::post('/konsultasi/{consultation}/balas', [ConsultationController::class, 'reply'])->name('konsultasi.reply');
+    Route::post('/profile', [ProfileController::class, 'apiUpdate'])->middleware('auth:sanctum');
+    Route::get('/data-balita', [BalitaController::class, 'index'])->name('balita.index');
 });
 
 require __DIR__ . '/auth.php';

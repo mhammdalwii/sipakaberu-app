@@ -11,8 +11,13 @@
         </div>
 
         <div class="space-y-6 py-4">
+            @php
+                $hasRecipes = false;
+            @endphp
+
             @foreach ($recipeCategories as $category)
                 @if ($category->recipes->isNotEmpty())
+                    @php $hasRecipes = true; @endphp
                     <div class="space-y-3">
                         <div class="flex justify-between items-center px-4">
                             <h2 class="font-bold text-md text-gray-800">{{ $category->name }}</h2>
@@ -33,6 +38,19 @@
                     </div>
                 @endif
             @endforeach
+
+            {{-- Jika tidak ada resep sama sekali --}}
+            @if (!$hasRecipes)
+                <div class="text-center text-gray-500 py-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-6h13M9 5h13M5 7h.01M5 11h.01M5 15h.01M5 19h.01" />
+                    </svg>
+                    <p class="text-lg font-semibold">Belum ada resep tersedia</p>
+                    <p class="text-sm text-gray-400">Tunggu ya, resep sehat akan segera hadir 😊</p>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

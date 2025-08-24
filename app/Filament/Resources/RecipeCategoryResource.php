@@ -16,7 +16,7 @@ class RecipeCategoryResource extends Resource
 {
     protected static ?string $model = RecipeCategory::class;
     protected static ?string $navigationIcon = 'heroicon-o-tag';
-    protected static ?string $navigationGroup = 'Manajemen Resep'; // Mengelompokkan menu
+    protected static ?string $navigationGroup = 'Manajemen Resep';
 
     public static function form(Form $form): Form
     {

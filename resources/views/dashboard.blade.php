@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- Kita kosongkan header bawaan agar bisa membuat layout custom --}}
     <x-slot name="header">
         <div class="hidden"></div>
     </x-slot>
@@ -9,7 +8,6 @@
         <div class="bg-[#31C74A] p-4 rounded-b-3xl shadow-lg text-white relative z-10">
             <div class="flex items-center justify-between">
                 <div>
-                    {{-- Mengambil nama pengguna yang sedang login --}}
                     <h1 class="text-xl font-bold">Hi, {{ Auth::user()->name }}</h1>
                     <p class="text-sm">Selamat Datang di SIKABERU</p>
                 </div>
@@ -23,16 +21,15 @@
         </div>
 
         {{-- BAGIAN 2: KONTEN UTAMA (SEARCH, MENU, KARTU) --}}
-        <div class="p-4 -mt-2 relative z-0">
-            {{-- Search Bar --}}
-            <div class="mb-6">
-                <input type="text" placeholder="Cari"
-                    class="w-full border-gray-300 rounded-full shadow-md focus:ring-green-500 focus:border-green-500">
-            </div>
+        <div class="p-4 mt-2 relative z-0">
 
             {{-- Grid Menu Utama --}}
             <div class="grid grid-cols-3 gap-4 text-center mb-6">
                 {{--  gambar ikon di folder public/images/icons/ --}}
+                <a href="{{ route('balita.index') }}" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
+                    <img src="images/balita.png" alt="Data Balita" class="h-12 w-12 mb-1">
+                    <span class="text-xs font-medium">Data Balita</span>
+                </a>
                 <a href="{{ route('edukasi.index') }}"
                     class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
                     <img src="images/logoEdukasi.png" alt="Edukasi" class="h-12 w-12 mb-1">

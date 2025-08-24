@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('image')->nullable(); // Untuk menyimpan path gambar
-            $table->text('description')->nullable(); // Deskripsi singkat resep
-            $table->text('ingredients'); // Bahan-bahan (bisa format list)
-            $table->text('instructions'); // Langkah-langkah pembuatan
-            $table->unsignedInteger('prep_time')->nullable(); // Waktu persiapan (menit)
+            $table->string('image')->nullable();
+            $table->text('description')->nullable();
+            $table->text('ingredients');
+            $table->text('instructions');
+            $table->unsignedInteger('prep_time')->nullable();
             $table->unsignedInteger('cook_time')->nullable(); // Waktu memasak (menit)
             $table->string('servings')->nullable(); // Jumlah porsi (contoh: "4 orang")
             $table->timestamps();
