@@ -18,4 +18,16 @@ class AppointmentController extends Controller
 
         return AppointmentResource::collection($appointments);
     }
+
+    public function history()
+    {
+        // Ambil semua jadwal yang tanggalnya sudah lewat
+        $appointments = Appointment::where('schedule_date', '<', now())
+            // Urutkan dari yang paling baru selesai (descending)
+            ->orderBy('schedule_date', 'desc')
+            ->paginate(10);
+
+        // Kembalikan data menggunakan resource yang sama
+        return AppointmentResource::collection($appointments);
+    }
 }

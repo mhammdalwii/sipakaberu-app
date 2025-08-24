@@ -21,16 +21,15 @@
         </div>
 
         {{-- BAGIAN 2: KONTEN UTAMA (SEARCH, MENU, KARTU) --}}
-        <div class="p-4 -mt-2 relative z-0">
-            {{-- Search Bar --}}
-            <div class="mb-6">
-                <input type="text" placeholder="Cari"
-                    class="w-full border-gray-300 rounded-full shadow-md focus:ring-green-500 focus:border-green-500">
-            </div>
+        <div class="p-4 mt-2 relative z-0">
 
             {{-- Grid Menu Utama --}}
             <div class="grid grid-cols-3 gap-4 text-center mb-6">
                 {{--  gambar ikon di folder public/images/icons/ --}}
+                <a href="{{ route('balita.index') }}" class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
+                    <img src="images/balita.png" alt="Data Balita" class="h-12 w-12 mb-1">
+                    <span class="text-xs font-medium">Data Balita</span>
+                </a>
                 <a href="{{ route('edukasi.index') }}"
                     class="flex flex-col items-center p-2 bg-white rounded-lg shadow">
                     <img src="images/logoEdukasi.png" alt="Edukasi" class="h-12 w-12 mb-1">

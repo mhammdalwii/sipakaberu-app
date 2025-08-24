@@ -12,6 +12,7 @@ use App\Http\Controllers\HelpCenterController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BalitaController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -48,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/konsultasi/{consultation}', [ConsultationController::class, 'show'])->name('konsultasi.show');
     Route::post('/konsultasi/{consultation}/balas', [ConsultationController::class, 'reply'])->name('konsultasi.reply');
     Route::post('/profile', [ProfileController::class, 'apiUpdate'])->middleware('auth:sanctum');
+    Route::get('/data-balita', [BalitaController::class, 'index'])->name('balita.index');
 });
 
 require __DIR__ . '/auth.php';

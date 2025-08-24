@@ -23,8 +23,13 @@
                 </div>
             </div>
 
+            @php
+                $hasPosts = false;
+            @endphp
+
             @foreach ($categories as $category)
                 @if ($category->educationPosts->isNotEmpty())
+                    @php $hasPosts = true; @endphp
                     <div class="space-y-3">
                         <div class="flex justify-between items-center px-4">
                             <h2 class="font-bold text-md text-gray-800">{{ $category->name }}</h2>
@@ -36,10 +41,10 @@
                             @foreach ($category->educationPosts as $post)
                                 <a href="{{ route('edukasi.post.show', $post->slug) }}"
                                     class="flex-shrink-0 w-[45%] md:w-[22%]">
-                                    {{-- Placeholder untuk thumbnail video --}}
+                                    {{-- Thumbnail edukasi --}}
                                     <div
                                         class="bg-gray-200 rounded-lg h-24 w-full flex items-center justify-center mb-2">
-                                        <img src="images/edukasi.png" alt="{{ $post->title }}"
+                                        <img src="{{ asset('images/edukasi.png') }}" alt="{{ $post->title }}"
                                             class="w-full h-full rounded-lg object-cover">
                                     </div>
                                     <h3 class="text-sm font-medium text-gray-800 truncate">{{ $post->title }}</h3>
@@ -49,6 +54,19 @@
                     </div>
                 @endif
             @endforeach
+
+            {{-- Jika tidak ada edukasi sama sekali --}}
+            @if (!$hasPosts)
+                <div class="text-center text-gray-500 py-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="text-lg font-semibold">Belum ada edukasi tersedia</p>
+                    <p class="text-sm text-gray-400">Tunggu ya, konten edukasi akan segera hadir 📚</p>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

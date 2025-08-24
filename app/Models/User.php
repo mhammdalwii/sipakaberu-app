@@ -75,4 +75,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->is_admin;
     }
+
+    public function balitas()
+    {
+        return $this->hasMany(Balita::class);
+    }
 }

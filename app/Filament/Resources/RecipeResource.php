@@ -35,15 +35,14 @@ class RecipeResource extends Resource
                                 Forms\Components\TextInput::make('title')
                                     ->required()
                                     ->maxLength(255)
+                                    ->live(onBlur: true)
                                     ->label('Nama Resep'),
 
                                 Forms\Components\TextInput::make('slug')
                                     ->disabled()
-                                    ->dehydrated(true) // pastikan tetap dikirim meskipun disabled
-                                    ->default(fn($get) => \Illuminate\Support\Str::slug($get('title')))
-                                    ->helperText('Slug akan terisi otomatis.')
+                                    ->dehydrated(true)
+                                    ->helperText('Slug otomatis dari judul.')
                                     ->unique(ignoreRecord: true),
-
 
                                 // Ini adalah komponen untuk upload gambar
                                 Forms\Components\FileUpload::make('image')
@@ -102,16 +101,32 @@ class RecipeResource extends Resource
             ]);
     }
 
-    // Logika untuk membuat slug otomatis
+    protected static function generateUniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $slug = Str::slug($title);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        // pastikan slug unik
+        while (Recipe::where('slug', $slug)
+            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+            ->exists()
+        ) {
+            $slug = $originalSlug . '-' . $counter++;
+        }
+
+        return $slug;
+    }
+
     protected static function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['slug'] = Str::slug($data['title']);
+        $data['slug'] = static::generateUniqueSlug($data['title']);
         return $data;
     }
 
     protected static function mutateFormDataBeforeSave(array $data): array
     {
-        $data['slug'] = Str::slug($data['title']);
+        $data['slug'] = static::generateUniqueSlug($data['title'], $data['id'] ?? null);
         return $data;
     }
 
