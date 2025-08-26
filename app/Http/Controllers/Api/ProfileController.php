@@ -1,36 +1,52 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Storage;
-
+use Illuminate\http\Request;
+use Illuminate\support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+    /**
+     * Mengembalikan data pengguna yang sedang login.
+     */
+    public function show(Request $request)
+    {
+        return new UserResource($request->user());
+    }
+
+    /**
+     * Memperbarui profil pengguna.
+     */
     public function update(ProfileUpdateRequest $request)
     {
+        /** @var \App\Models\User $user */
         $user = $request->user();
-        $user->fill($request->validated());
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
+
+        // Ambil hanya data yang tervalidasi dari ProfileUpdateRequest
+        $validatedData = $request->validated();
+
+        // Logika untuk menangani upload foto profil jika ada
         if ($request->hasFile('profile_photo')) {
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
-
-            // 2. Simpan foto baru di folder 'storage/app/public/profile-photos'
             $path = $request->file('profile_photo')->store('profile-photos', 'public');
-
-            // 3. Simpan path foto baru ke database
-            $user->profile_photo_path = $path;
+            // Hapus key 'profile_photo' dari data validasi, ganti dengan path
+            unset($validatedData['profile_photo']);
+            $validatedData['profile_photo_path'] = $path;
         }
-        $user->save();
-        $statusMessage = $request->hasFile('profile_photo') ? 'photo-updated' : 'profile-updated';
-        return Redirect::route('profile.edit')->with('status', $statusMessage);
+
+        // Update user dengan data yang sudah bersih
+        $user->update($validatedData);
+
+        // Kembalikan response sukses dengan data user terbaru
+        return response()->json([
+            'message' => 'Profil berhasil diperbarui!',
+            'user' => new UserResource($user)
+        ]);
     }
 }

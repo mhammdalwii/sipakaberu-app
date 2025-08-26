@@ -14,6 +14,10 @@ class PosyanduResource extends Resource
 {
     protected static ?string $model = Posyandu::class;
 
+    protected static ?string $modelLabel = 'Posyandu';
+    protected static ?string $pluralModelLabel = 'Posyandu';
+    protected static ?string $navigationLabel = 'Posyandu';
+
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
     protected static ?string $navigationGroup = 'Manajemen Jadwal & Layanan';
 

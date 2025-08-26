@@ -19,6 +19,10 @@ class BalitaResource extends Resource
 {
     protected static ?string $model = Balita::class;
 
+    protected static ?string $modelLabel = 'Balita';
+    protected static ?string $pluralModelLabel = 'Balita';
+    protected static ?string $navigationLabel = 'Balita';
+
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
 

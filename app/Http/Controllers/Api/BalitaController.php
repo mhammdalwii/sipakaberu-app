@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\BalitaResource;
 use App\Models\Balita;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BalitaController extends Controller
 {
-    /**
-     * Menampilkan semua data balita (publik) dengan fitur pencarian.
-     */
     public function index(Request $request)
     {
-        $query = Balita::query();
-
+        $query = Balita::query()->with('user');
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where('name', 'like', '%' . $search . '%')
@@ -23,9 +20,8 @@ class BalitaController extends Controller
                 });
         }
 
+        $balitas = $query->latest()->paginate(10);
 
-        $balitas = $query->with('user')->latest()->paginate(10);
-
-        return view('balita.index', ['balitas' => $balitas]);
+        return BalitaResource::collection($balitas);
     }
 }
