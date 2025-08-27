@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\HelpCenterController;
 use App\Http\Controllers\Api\ConsultationController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RecipeCategoryController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Api\BalitaController;
 
@@ -20,10 +20,13 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [ProfileController::class, 'show']);
+    Route::post('/user/update', [ProfileController::class, 'update']);
     Route::get('/recipes', [RecipeController::class, 'index']);
     Route::get('/recipes/{recipe:slug}', [RecipeController::class, 'show']);
     Route::get('/recipe-categories', [RecipeCategoryController::class, 'index']);
     Route::get('/recipe-categories/{recipeCategory:slug}', [RecipeCategoryController::class, 'show']);
+    Route::get('/education', [EducationController::class, 'getCategories']);
     Route::get('/education/categories', [EducationController::class, 'getCategories']);
     Route::get('/education/categories/{category:slug}', [EducationController::class, 'getPostsByCategory']);
     Route::get('/education/posts/{educationPost:slug}', [EducationController::class, 'showPost']);
@@ -41,8 +44,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
     Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
-    // Route::post('/profile/update', [ProfileController::class, 'apiUpdate']);
-    Route::get('/user', [\App\Http\Controllers\Api\ProfileController::class, 'show']);
-    Route::post('/user/update', [\App\Http\Controllers\Api\ProfileController::class, 'update']);
     Route::get('/balitas', [BalitaController::class, 'index']);
 });
