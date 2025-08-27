@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Consultation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\NewConsultationMessage;
 
 
 class ConsultationController extends Controller
@@ -36,10 +37,11 @@ class ConsultationController extends Controller
         ]);
 
         // Buat pesan pertama di dalam konsultasi tersebut
-        $consultation->messages()->create([
+        $message = $consultation->messages()->create([
             'user_id' => Auth::id(),
             'body' => $request->body,
         ]);
+        broadcast(new NewConsultationMessage($message))->toOthers();
 
         return redirect()->route('konsultasi.show', $consultation);
     }
@@ -63,11 +65,12 @@ class ConsultationController extends Controller
 
         $request->validate(['body' => 'required|string']);
 
-        $consultation->messages()->create([
+        $message = $consultation->messages()->create([
             'user_id' => Auth::id(),
             'body' => $request->body,
         ]);
 
+        broadcast(new NewConsultationMessage($message))->toOthers();
         return back()->with('status', 'Pesan berhasil dikirim.');
     }
 }

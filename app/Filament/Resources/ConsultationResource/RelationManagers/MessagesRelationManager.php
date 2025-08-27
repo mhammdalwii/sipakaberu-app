@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use App\Events\NewConsultationMessage;
 
 class MessagesRelationManager extends RelationManager
 {
@@ -43,8 +44,12 @@ class MessagesRelationManager extends RelationManager
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['user_id'] = Auth::id();
                         return $data;
+                    })
+                    ->after(function (\App\Models\ConsultationMessage $record, array $data) {
+                        broadcast(new NewConsultationMessage($record))->toOthers();
                     }),
             ])
+
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

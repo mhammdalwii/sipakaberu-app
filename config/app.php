@@ -15,6 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -105,6 +106,8 @@ return [
         ),
     ],
 
+
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
@@ -122,5 +125,6 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
 
 ];
