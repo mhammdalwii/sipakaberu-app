@@ -7,8 +7,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 use App\Http\Resources\UserResource;
 
 class ProfileController extends Controller
@@ -19,6 +19,7 @@ class ProfileController extends Controller
             'user' => $request->user(),
         ]);
     }
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -30,41 +31,48 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $user->fill($request->validated());
-        if ($request->hasFile('profile_photo')) {
-            if ($user->profile_photo_path) {
-                Storage::disk('public')->delete($user->profile_photo_path);
-            }
-            $path = $request->file('profile_photo')->store('profile-photos', 'public');
-            $user->profile_photo_path = $path;
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
+
+        $this->handleProfilePhoto($request, $user);
+
         $user->save();
-        return new UserResource($user);
+
+        return response()->json(new UserResource($user));
     }
-    /**
-     * Memperbarui informasi profil pengguna.
-     */
+
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
         $user->fill($request->validated());
+
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
+
+        $this->handleProfilePhoto($request, $user);
+
+        $user->save();
+
+        $statusMessage = $request->hasFile('profile_photo') ? 'photo-updated' : 'profile-updated';
+
+        return Redirect::route('profile.edit')->with('status', $statusMessage);
+    }
+
+    private function handleProfilePhoto(Request $request, $user): void
+    {
         if ($request->hasFile('profile_photo')) {
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
 
-            // 2. Simpan foto baru di folder 'storage/app/public/profile-photos'
             $path = $request->file('profile_photo')->store('profile-photos', 'public');
-
-            // 3. Simpan path foto baru ke database
             $user->profile_photo_path = $path;
         }
-        $user->save();
-        $statusMessage = $request->hasFile('profile_photo') ? 'photo-updated' : 'profile-updated';
-        return Redirect::route('profile.edit')->with('status', $statusMessage);
     }
+
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [

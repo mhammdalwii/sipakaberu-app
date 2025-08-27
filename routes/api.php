@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\ConsultationController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RecipeCategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Resources\UserResource;
+use App\Http\Controllers\Api\BalitaController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -39,10 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
     Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
-    Route::post('/profile', [ProfileController::class, 'apiUpdate']);
+    // Route::post('/profile/update', [ProfileController::class, 'apiUpdate']);
+    Route::get('/user', [\App\Http\Controllers\Api\ProfileController::class, 'show']);
+    Route::post('/user/update', [\App\Http\Controllers\Api\ProfileController::class, 'update']);
+    Route::get('/balitas', [BalitaController::class, 'index']);
 });
-
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');

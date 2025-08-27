@@ -9,7 +9,7 @@
             <div class="w-6"></div>
         </div>
 
-        <div class="flex-grow p-4 space-y-4">
+        <div class="flex-grow p-4 space-y-4" id="chat-area">
             @foreach ($consultation->messages as $message)
                 <div class="flex {{ $message->user_id === Auth::id() ? 'justify-end' : 'justify-start' }}">
                     <div
@@ -41,3 +41,40 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil elemen area chat dan ID user yang sedang login
+        const chatArea = document.getElementById('chat-area');
+        const currentUserId = {{ Auth::id() }};
+
+        // Dengarkan siaran di channel privat untuk konsultasi ini
+        // Kode ini sekarang aman karena dijalankan setelah Echo siap
+        window.Echo.private('consultation.{{ $consultation->id }}')
+            .listen('NewConsultationMessage', (e) => {
+                // Buat div untuk pesan baru
+                const message = e.message;
+                const messageWrapper = document.createElement('div');
+                const messageBubble = document.createElement('div');
+
+                // Tentukan posisi dan warna bubble
+                const isMyMessage = message.user_id === currentUserId;
+                messageWrapper.className = isMyMessage ? 'flex justify-end' : 'flex justify-start';
+                messageBubble.className = 'max-w-xs lg:max-w-md px-4 py-2 rounded-lg ' + (isMyMessage ?
+                    'bg-green-200' : 'bg-white shadow');
+
+                // Isi bubble dengan konten pesan
+                messageBubble.innerHTML = `
+                    <div class="prose prose-sm max-w-none">${message.body}</div>
+                    <p class="text-xs text-gray-400 mt-1 text-right">${new Date(message.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
+                `;
+
+                // Tambahkan pesan baru ke area chat
+                messageWrapper.appendChild(messageBubble);
+                chatArea.appendChild(messageWrapper);
+
+                // Auto-scroll ke pesan paling bawah
+                chatArea.scrollTop = chatArea.scrollHeight;
+            });
+    });
+</script>

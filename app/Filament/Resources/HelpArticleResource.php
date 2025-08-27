@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 
 class HelpArticleResource extends Resource
 {
@@ -65,6 +66,18 @@ class HelpArticleResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    protected static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['slug'] = Str::slug($data['title']);
+        return $data;
+    }
+
+    protected static function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['slug'] = Str::slug($data['title']);
+        return $data;
     }
 
     public static function getRelations(): array
