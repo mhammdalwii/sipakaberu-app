@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/consultations', [ConsultationController::class, 'store']);
     Route::get('/consultations/{consultation}', [ConsultationController::class, 'show']);
     Route::post('/consultations/{consultation}/reply', [ConsultationController::class, 'reply']);
+    Route::delete('/consultations/{consultation}', [ConsultationController::class, 'destroy']);
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
     Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);

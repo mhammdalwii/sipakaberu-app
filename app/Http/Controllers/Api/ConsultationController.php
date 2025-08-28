@@ -52,4 +52,22 @@ class ConsultationController extends Controller
 
         return response()->json(['message' => 'Pesan berhasil dikirim.', 'data' => $message]);
     }
+
+    // ==========================================================
+    // TAMBAHKAN FUNGSI BARU DI BAWAH INI
+    // ==========================================================
+    /**
+     * Menghapus konsultasi berdasarkan ID.
+     */
+    public function destroy(Consultation $consultation)
+    {
+        // Memastikan hanya pemilik konsultasi yang bisa menghapus
+        $this->authorize('delete', $consultation);
+
+        // Hapus data dari database
+        $consultation->delete();
+
+        // Kembalikan respons sukses tanpa data (status 204)
+        return response()->json(['message' => 'Konsultasi berhasil dihapus.'], 200);
+    }
 }
