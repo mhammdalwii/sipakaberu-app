@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\HelpArticle;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class HelpArticlePolicy
 {
@@ -20,7 +19,7 @@ class HelpArticlePolicy
     }
 
     /**
-     * Pengguna biasa tidak bisa melakukan apa-apa.
+     * Aturan default untuk pengguna biasa (non-admin).
      * Kita return false agar hanya admin (yang sudah lolos dari 'before') yang bisa.
      */
     public function viewAny(User $user): bool

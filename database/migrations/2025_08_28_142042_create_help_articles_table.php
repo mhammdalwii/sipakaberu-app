@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('help_articles', function (Blueprint $table) {
             $table->id();
-            $table->string('title'); // Judul artikel, cth: "Mengatasi Luka Bakar"
+            $table->string('title');
             $table->string('slug')->unique();
-            $table->text('content'); // Isi konten atau panduan
+            $table->text('content');
             $table->timestamps();
         });
     }
