@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/layanan-kesehatan', [PosyanduController::class, 'index'])->name('layanan-kesehatan.index');
     Route::get('/pusat-bantuan', [HelpCenterController::class, 'index'])->name('pusat-bantuan.index');
     Route::get('/notifikasi', [NotificationController::class, 'index'])->name('notifikasi.index');
-    Route::get('/profil', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profil.show');
     Route::delete('/notifikasi/{notification}', [NotificationController::class, 'destroy'])->name('notifikasi.destroy');
     Route::get('/konsultasi', [ConsultationController::class, 'index'])->name('konsultasi.index');
     Route::get('/konsultasi/baru', [ConsultationController::class, 'create'])->name('konsultasi.create');
