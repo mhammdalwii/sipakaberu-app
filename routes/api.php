@@ -17,6 +17,7 @@ use App\Http\Resources\UserResource;
 use App\Http\Controllers\Api\BalitaController;
 
 // Jangan di ubah Alwi
+// test
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
