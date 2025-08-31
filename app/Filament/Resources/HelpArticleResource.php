@@ -16,11 +16,8 @@ class HelpArticleResource extends Resource
     protected static ?string $model = HelpArticle::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
-    protected static ?string $navigationLabel = 'Panduan';
     protected static ?string $pluralModelLabel = 'Panduan';
-    protected static ?string $modelLabel = 'Panduan';
     protected static ?string $navigationGroup = 'Manajemen Pusat Bantuan';
-
 
     public static function form(Form $form): Form
     {
@@ -32,8 +29,10 @@ class HelpArticleResource extends Resource
                     ->label('Judul Artikel'),
 
                 Forms\Components\TextInput::make('slug')
+                    ->unique(ignoreRecord: true)
                     ->disabled()
-                    ->helperText('Slug akan dibuat otomatis dari judul saat disimpan.'),
+                    ->dehydrated()
+                    ->helperText('Slug akan terisi otomatis setelah disimpan.'),
 
                 Forms\Components\RichEditor::make('content')
                     ->required()
@@ -46,25 +45,16 @@ class HelpArticleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->label('Judul')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->label('Slug')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Dibuat')
-                    ->dateTime('d M Y H:i')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('title')->label('Judul')->searchable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime('d M Y')->label('Dibuat'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 

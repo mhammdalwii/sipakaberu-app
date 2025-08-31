@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Http\Resources\UserResource;
 
-
 class ProfileController extends Controller
 {
     /**
