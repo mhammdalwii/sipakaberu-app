@@ -14,6 +14,17 @@ class MedicinalPlantResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'              => $this->id,
+            'name'            => $this->name,
+            'slug'            => $this->slug,
+            'scientific_name' => $this->scientific_name,
+            'image'           => $this->image ? asset('storage/' . $this->image) : null,
+            'description'     => $this->description,
+            'benefits'        => $this->benefits,
+            'how_to_use'      => $this->how_to_use,
+            'created_at'      => $this->created_at,
+            'updated_at'      => $this->updated_at,
+        ];
     }
 }
