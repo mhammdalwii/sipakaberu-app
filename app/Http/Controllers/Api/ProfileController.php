@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Http\Resources\UserResource;
+
 
 class ProfileController extends Controller
 {
@@ -19,7 +21,7 @@ class ProfileController extends Controller
         // Menambahkan type-hint untuk membantu editor kode
         /** @var \App\Models\User $user */
         $user = $request->user();
-        return $user;
+        return new UserResource($user);
     }
 
     /**
@@ -59,7 +61,7 @@ class ProfileController extends Controller
         // 4. Kembalikan data user yang sudah diperbarui
         return response()->json([
             'message' => 'Profil berhasil diperbarui!',
-            'user' => $user->fresh() // Ambil data terbaru dari database
+            'user' => new UserResource($user->fresh()) // Ambil data terbaru dari database
         ]);
     }
 }
