@@ -10,7 +10,22 @@
             <div class="w-6"></div>
         </div>
 
-        <div class="space-y-6 py-4">
+        <div class="p-4">
+            <form action="{{ route('resep.index') }}" method="GET">
+                <div class="relative">
+                    <input type="text" name="search" placeholder="Cari nama resep..."
+                        class="w-full border-gray-300 rounded-full shadow-sm pl-10" value="{{ request('search') }}">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="space-y-6 pb-4">
             @php
                 $hasRecipes = false;
             @endphp
@@ -45,10 +60,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 17v-6h13M9 5h13M5 7h.01M5 11h.01M5 15h.01M5 19h.01" />
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-                    <p class="text-lg font-semibold">Belum ada resep tersedia</p>
-                    <p class="text-sm text-gray-400">Tunggu ya, resep sehat akan segera hadir 😊</p>
+                    <p class="text-lg font-semibold">Resep tidak ditemukan</p>
+                    <p class="text-sm text-gray-400">Coba gunakan kata kunci lain.</p>
                 </div>
             @endif
         </div>
