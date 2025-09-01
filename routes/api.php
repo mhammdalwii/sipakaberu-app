@@ -25,6 +25,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [ProfileController::class, 'show']);
     Route::post('/user/update', [ProfileController::class, 'update']);
+    Route::post('/change-password', [ProfileController::class, 'changePassword']);
     Route::get('/recipes', [RecipeController::class, 'index']);
     Route::get('/recipes/{recipe:slug}', [RecipeController::class, 'show']);
     Route::get('/recipe-categories', [RecipeCategoryController::class, 'index']);
