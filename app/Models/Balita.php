@@ -30,4 +30,8 @@ class Balita extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function measurements()
+    {
+        return $this->hasMany(BalitaMeasurement::class)->orderBy('measurement_date', 'desc');
+    }
 }

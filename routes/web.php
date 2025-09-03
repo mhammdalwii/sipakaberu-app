@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/konsultasi/{consultation}/balas', [ConsultationController::class, 'reply'])->name('konsultasi.reply');
     Route::post('/profile', [ProfileController::class, 'apiUpdate'])->middleware('auth:sanctum');
     Route::get('/data-balita', [BalitaController::class, 'index'])->name('balita.index');
+    Route::get('/data-balita/{balita}', [BalitaController::class, 'show'])->name('balita.show');
 });
 
 require __DIR__ . '/auth.php';

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Balita;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BalitaController extends Controller
 {
@@ -13,19 +12,31 @@ class BalitaController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Balita::query();
-
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $query->where('name', 'like', '%' . $search . '%')
-                ->orWhereHas('user', function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%');
+        $balitas = Balita::with('user')
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($sub) use ($search) {
+                            $sub->where('name', 'like', "%{$search}%");
+                        });
                 });
-        }
+            })
+            ->latest()
+            ->paginate(10);
 
+        return view('balita.index', compact('balitas'));
+    }
 
-        $balitas = $query->with('user')->latest()->paginate(10);
+    /**
+     * Detail data balita dengan relasi user dan measurements.
+     */
+    public function show(Balita $balita)
+    {
+        $balita->load(['user', 'measurements' => function ($q) {
+            $q->orderBy('measurement_date', 'desc');
+        }]);
 
-        return view('balita.index', ['balitas' => $balitas]);
+        return view('balita.show', compact('balita'));
     }
 }

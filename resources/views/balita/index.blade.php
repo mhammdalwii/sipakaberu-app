@@ -9,11 +9,14 @@
             <h1 class="text-lg font-bold text-center flex-grow">Bank Data Balita</h1>
             <div class="w-6"></div>
         </div>
+
         <div class="p-4">
+            {{-- Form pencarian --}}
             <form action="{{ route('balita.index') }}" method="GET" class="mb-6">
                 <div class="relative">
                     <input type="text" name="search" placeholder="Cari nama balita atau orang tua..."
-                        class="w-full border-gray-300 rounded-full shadow-sm pl-10" value="{{ request('search') }}">
+                        class="w-full border-gray-300 rounded-full shadow-sm pl-10 focus:ring focus:ring-green-200 focus:border-green-500"
+                        value="{{ request('search') }}">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -23,64 +26,62 @@
                 </div>
             </form>
 
-            <div class="p-4">
-                <div class="mb-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-r-lg" role="alert">
-                    <p class="font-bold">Informasi</p>
-                    <p class="text-sm">Data balita di bawah ini dikelola oleh admin. Silakan hubungi kader posyandu
-                        untuk
-                        penambahan atau perubahan data.</p>
+            {{-- Info pencarian --}}
+            @if (request('search'))
+                <div class="mb-4 text-sm text-gray-600">
+                    Ditemukan <span class="font-semibold">{{ $balitas->total() }}</span> hasil untuk pencarian
+                    "<span class="italic">{{ request('search') }}</span>"
                 </div>
+            @endif
 
-                <div class="space-y-4">
-                    @forelse ($balitas as $balita)
-                        <div class="bg-white rounded-lg p-4 shadow">
-                            <div class="border-b pb-3 mb-3">
-                                <h3 class="font-bold text-lg text-gray-900">{{ $balita->name }}</h3>
-                                <p class="text-sm text-gray-500">Orang Tua: {{ $balita->user->name }}</p>
-                                <p class="text-sm text-gray-600">Jenis Kelamin: {{ $balita->gender }}</p>
-                                <p class="text-sm text-gray-600">Lahir:
-                                    {{ \Carbon\Carbon::parse($balita->date_of_birth)->translatedFormat('d F Y') }}</p>
+            {{-- informasi --}}
+            <div class="mb-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-r-lg" role="alert">
+                <p class="font-bold">Informasi</p>
+                <p class="text-sm">Data balita di bawah ini dikelola oleh admin. Klik pada nama balita untuk melihat
+                    riwayat lengkap.</p>
+            </div>
+
+            <div class="space-y-4">
+                @forelse ($balitas as $balita)
+                    <a href="{{ route('balita.show', $balita) }}" class="block">
+                        <div class="bg-white rounded-lg p-4 shadow hover:shadow-lg transition-shadow duration-300">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-900">{{ $balita->name }}</h3>
+                                    <p class="text-sm text-gray-500">Orang Tua: {{ $balita->user->name }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span
+                                        class="text-xs font-semibold text-blue-800 bg-blue-100 px-2 py-1 rounded-full">
+                                        Lihat Riwayat
+                                    </span>
+                                </div>
                             </div>
 
+                            {{-- pengukuran terakhir --}}
                             @if ($balita->measurement_date)
-                                <p class="text-sm font-semibold text-gray-700 mb-3">
-                                    Pengukuran Terakhir:
-                                    {{ \Carbon\Carbon::parse($balita->measurement_date)->translatedFormat('d F Y') }}
-                                </p>
+                                <div class="mt-3 border-t pt-3">
+                                    <p class="text-sm text-gray-600">
+                                        Pengukuran Terakhir:
+                                        <span class="font-semibold">
+                                            {{ \Carbon\Carbon::parse($balita->measurement_date)->translatedFormat('d F Y') }}
+                                        </span>
+                                    </p>
+                                </div>
                             @endif
-
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                                <div>
-                                    <p class="text-sm text-gray-500">Tinggi Badan</p>
-                                    <p class="font-bold text-xl">{{ $balita->height }} <span
-                                            class="text-sm font-normal">cm</span></p>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-500">Berat Badan</p>
-                                    <p class="font-bold text-xl">{{ $balita->weight }} <span
-                                            class="text-sm font-normal">kg</span></p>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-500">Lingkar Lengan Atas</p>
-                                    <p class="font-bold text-xl">{{ $balita->arm_circumference }} <span
-                                            class="text-sm font-normal">cm</span></p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500">Lingkar Kepala</p>
-                                    <p class="font-bold text-lg">{{ $balita->head_circumference }} <span
-                                            class="text-xs font-normal">cm</span></p>
-                                </div>
-                            </div>
                         </div>
-                    @empty
-                        <div class="bg-white rounded-lg p-6 text-center shadow">
-                            <p class="text-sm text-gray-500">Data balita Anda belum ditambahkan oleh admin.</p>
-                        </div>
-                    @endforelse
-                    <div class="mt-4">
-                        {{ $balitas->links() }}
+                    </a>
+                @empty
+                    <div class="bg-white rounded-lg p-6 text-center shadow">
+                        <p class="text-sm text-gray-500">Data balita tidak ditemukan.</p>
                     </div>
+                @endforelse
+
+                <div class="mt-4">
+                    {{-- Pagination dengan query pencarian ikut terbawa --}}
+                    {{ $balitas->appends(request()->query())->links() }}
                 </div>
             </div>
         </div>
+    </div>
 </x-app-layout>
