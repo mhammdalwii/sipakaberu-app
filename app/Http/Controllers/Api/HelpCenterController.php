@@ -9,12 +9,28 @@ use App\Models\HelpArticle;
 
 class HelpCenterController extends Controller
 {
-    public function index()
+    /**
+     * Daftar artikel bantuan dengan optional search
+     */
+    public function index(Request $request)
     {
-        $articles = HelpArticle::latest()->get();
+        $query = HelpArticle::query();
+
+        // Jika ada parameter search, filter berdasarkan title atau content
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('content', 'like', '%' . $search . '%');
+        }
+
+        $articles = $query->latest()->get();
+
         return HelpArticleResource::collection($articles);
     }
 
+    /**
+     * Detail artikel berdasarkan slug
+     */
     public function show(HelpArticle $helpArticle)
     {
         return new HelpArticleResource($helpArticle);
