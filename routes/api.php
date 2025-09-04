@@ -50,4 +50,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
     Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
     Route::get('/balitas', [BalitaController::class, 'index']);
+    Route::get('/balitas/{balita}/measurements', [BalitaController::class, 'measurements']);
 });

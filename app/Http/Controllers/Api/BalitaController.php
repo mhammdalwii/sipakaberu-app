@@ -24,4 +24,23 @@ class BalitaController extends Controller
 
         return BalitaResource::collection($balitas);
     }
+
+    public function measurements(Balita $balita)
+    {
+        $measurements = $balita->measurements()->orderBy('measurement_date')->get();
+
+        return response()->json([
+            'data' => [
+                'id' => $balita->id,
+                'name' => $balita->name,
+                'date_of_birth' => $balita->date_of_birth,
+                'gender' => $balita->gender,
+                'address' => $balita->address,
+                'parent' => $balita->parent,
+                'first_measurement' => $measurements->first(),
+                'last_measurement' => $measurements->last(),
+                'measurements' => $measurements,
+            ]
+        ]);
+    }
 }
