@@ -1,5 +1,6 @@
 <x-app-layout>
     <div class="bg-gray-50 min-h-screen">
+        {{-- Header --}}
         <div class="p-4 flex items-center border-b sticky top-0 bg-white z-10">
             <a href="{{ route('dashboard') }}" class="text-gray-700">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -11,7 +12,7 @@
         </div>
 
         <div class="p-4">
-            {{-- Form pencarian --}}
+            {{-- Form Pencarian --}}
             <form action="{{ route('balita.index') }}" method="GET" class="mb-6">
                 <div class="relative">
                     <input type="text" name="search" placeholder="Cari nama balita atau orang tua..."
@@ -26,7 +27,7 @@
                 </div>
             </form>
 
-            {{-- Info pencarian --}}
+            {{-- Info Pencarian --}}
             @if (request('search'))
                 <div class="mb-4 text-sm text-gray-600">
                     Ditemukan <span class="font-semibold">{{ $balitas->total() }}</span> hasil untuk pencarian
@@ -34,13 +35,15 @@
                 </div>
             @endif
 
-            {{-- informasi --}}
+            {{-- Informasi --}}
             <div class="mb-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-r-lg" role="alert">
                 <p class="font-bold">Informasi</p>
-                <p class="text-sm">Data balita di bawah ini dikelola oleh admin. Klik pada nama balita untuk melihat
-                    riwayat lengkap.</p>
+                <p class="text-sm">
+                    Data balita di bawah ini dikelola oleh admin. Klik pada nama balita untuk melihat riwayat lengkap.
+                </p>
             </div>
 
+            {{-- Daftar Balita --}}
             <div class="space-y-4">
                 @forelse ($balitas as $balita)
                     <a href="{{ route('balita.show', $balita) }}" class="block">
@@ -58,13 +61,14 @@
                                 </div>
                             </div>
 
-                            {{-- pengukuran terakhir --}}
-                            @if ($balita->measurement_date)
+                            {{-- Pengukuran terakhir --}}
+                            @if ($balita->measurements->isNotEmpty())
+                                @php $last = $balita->measurements->first(); @endphp
                                 <div class="mt-3 border-t pt-3">
                                     <p class="text-sm text-gray-600">
                                         Pengukuran Terakhir:
                                         <span class="font-semibold">
-                                            {{ \Carbon\Carbon::parse($balita->measurement_date)->translatedFormat('d F Y') }}
+                                            {{ \Carbon\Carbon::parse($last->measurement_date)->translatedFormat('d F Y') }}
                                         </span>
                                     </p>
                                 </div>
@@ -77,8 +81,8 @@
                     </div>
                 @endforelse
 
+                {{-- Pagination --}}
                 <div class="mt-4">
-                    {{-- Pagination dengan query pencarian ikut terbawa --}}
                     {{ $balitas->appends(request()->query())->links() }}
                 </div>
             </div>
