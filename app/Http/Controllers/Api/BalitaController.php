@@ -28,6 +28,8 @@ class BalitaController extends Controller
     // tambahan
     public function measurements(Balita $balita)
     {
+        $balita->load('user'); // pastikan relasi parent dimuat
+
         $measurements = $balita->measurements()->orderBy('measurement_date')->get();
 
         return response()->json([
@@ -37,7 +39,10 @@ class BalitaController extends Controller
                 'date_of_birth' => $balita->date_of_birth,
                 'gender' => $balita->gender,
                 'address' => $balita->address,
-                'parent' => $balita->parent,
+                'parent' => $balita->user ? [
+                    'id' => $balita->user->id,
+                    'name' => $balita->user->name,
+                ] : null,
                 'first_measurement' => $measurements->first(),
                 'last_measurement' => $measurements->last(),
                 'measurements' => $measurements,
