@@ -30,15 +30,37 @@ class BalitaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informasi Induk')
-                    ->schema([
-                        // Dropdown untuk memilih orang tua dari daftar pengguna
-                        Forms\Components\Select::make('user_id')
-                            ->label('Orang Tua (Pengguna)')
-                            ->options(User::all()->pluck('name', 'id'))
-                            ->searchable()
-                            ->required(),
-                    ]),
+                Forms\Components\Select::make('user_id')
+                    ->label('Orang Tua (Pengguna)')
+                    ->searchable()
+                    ->getSearchResultsUsing(
+                        fn(string $search): array =>
+                        \App\Models\User::where('name', 'like', "%{$search}%")
+                            ->where('is_admin', false)
+                            ->limit(50)
+                            ->pluck('name', 'id')
+                            ->toArray()
+                    )
+                    ->getOptionLabelUsing(
+                        fn($value): ?string =>
+                        \App\Models\User::find($value)?->name
+                    )
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required()->label('Nama Lengkap Orang Tua'),
+                        Forms\Components\TextInput::make('phone')
+                            ->required()->unique(table: \App\Models\User::class)->label('No. Telepon'),
+                        // Kita set password default, pengguna bisa mengubahnya nanti
+                        Forms\Components\Hidden::make('password')->default(fn() => bcrypt('password123')),
+                    ])
+                    ->createOptionUsing(function (array $data): int {
+                        // Logika untuk membuat user baru
+                        $newUser = \App\Models\User::create($data);
+                        // Kembalikan ID dari user yang baru dibuat
+                        return $newUser->id;
+                    })
+
+                    ->required(),
                 Forms\Components\Section::make('Data Balita')
                     ->schema([
                         Forms\Components\TextInput::make('name')
